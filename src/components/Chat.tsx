@@ -17,9 +17,15 @@ import {MockResponse} from "@ant-design/pro-chat/es/ProChat/mocks/streamResponse
 type ChildComponentProps = {
     currentMessagesValue: any;
     currentChatId: any;
+    selectedModel: any;
     handleNewChatChange: (value: any) => void; // 函数类型：接受一个any类型的参数并且不返回任何内容
 };
-const Chat: React.FC<ChildComponentProps> = ({handleNewChatChange,currentChatId,currentMessagesValue}) => {
+const Chat: React.FC<ChildComponentProps> = ({
+                                                 handleNewChatChange,
+                                                 currentChatId,
+                                                 selectedModel,
+                                                 currentMessagesValue
+                                             }) => {
 
     const [historyMessages, setHistoryMessages] = useState(currentMessagesValue || null);
 
@@ -35,10 +41,10 @@ const Chat: React.FC<ChildComponentProps> = ({handleNewChatChange,currentChatId,
         setShowComponent(true);
     }, []);
 
-    useEffect(()=>{
+    useEffect(() => {
         setHistoryMessages(currentMessagesValue);
-        console.log("history",historyMessages);
-    },[currentMessagesValue]);
+        console.log("history", historyMessages);
+    }, [currentMessagesValue]);
 
 
     /**
@@ -132,7 +138,7 @@ const Chat: React.FC<ChildComponentProps> = ({handleNewChatChange,currentChatId,
                                     type={"default"}
                                     onClick={() => {
                                         const messages = proChat.getChatMessages();
-                                        const { id, content } = messages.at(-1) || {};
+                                        const {id, content} = messages.at(-1) || {};
                                         if (!messages.length) {
                                             message.warning('会话为空');
                                         } else {
@@ -153,27 +159,43 @@ const Chat: React.FC<ChildComponentProps> = ({handleNewChatChange,currentChatId,
                     }}
                     request={async (messages) => {
                         console.log("request.length", messages.length);
-                        console.log("historyMessages.length",historyMessages?.length)
+                        console.log("historyMessages.length", historyMessages?.length)
                         if (messages.length <= historyMessages?.length) {
                             return new Response(historyMessages[2 * messages.length - 1]?.content);
                         }
                         const response = await fetch('/api/chat', {
                             method: 'POST',
                             //只传递最新一个问题，因为现在还无法做到连续对话
-                            body: JSON.stringify(messages[messages.length - 1]),
-                        });
+                            body: JSON.stringify(
+                                {
+                                    "model": selectedModel,
+                                    "messages": messages[messages.length - 1]
+                                })
 
+                        });
 
                         let data = undefined;
                         try {
                             data = await response.json();
-                        }catch (error:any){
-                            data = {data:"请求超时，服务器错误...😥"}
+                        } catch (error: any) {
+                            data = {data: "请求超时，服务器错误...😥"}
                         }
+
 
                         //保存消息
                         const currentMessages = proChat.getChatMessages();
-                        currentMessages[currentMessages.length - 1].content = data.data;
+                        const lastIndex = currentMessages.length - 1;
+                        const lastMessage = currentMessages[lastIndex];
+                        currentMessages[lastIndex] = {
+                            ...lastMessage,
+                            content: data.data,
+                            extra: {
+                                ...lastMessage.extra,
+                                fromModel: selectedModel
+                            }
+                        };
+                        //todo 消息来源怎么传递保存
+                        // currentMessages[currentMessages.length - 1].extra.fromModel = selectedModel;
                         // 添加长度检查
                         if (currentMessages.length >= 2) {
                             const lastTwoMessages = currentMessages.slice(-2);
@@ -184,7 +206,7 @@ const Chat: React.FC<ChildComponentProps> = ({handleNewChatChange,currentChatId,
                         }
 
                         //如果最新对话就获取历史消息显示在列表上
-                        if(messages.length === 1){
+                        if (messages.length === 1) {
                             const bool = [true];
                             handleNewChatChange(bool);
                         }

@@ -103,6 +103,11 @@ export default () => {
     setSiderWidth(!collapsed ? '56px' : '20%'); // 根据Sider的折叠状态设置宽度
     console.log("siderWidth",siderWidth);
   };
+
+  // 在父组件中提供 Context
+  const [selectedModel, setSelectedModel] = useState('qwen-plus');
+
+
   return (<div style={{
       height: '100vh',
       width: '100vw',
@@ -135,18 +140,20 @@ export default () => {
                   alignItems: 'center'
                 }}>
                   <Select
-                    defaultValue="医学助手basic"
+                    defaultValue="qwen-plus"
                     style={{width: 150}}
                     options={[
-                      {value: '医学助手basic', label: '医学助手basic'},
-                      {value: '医学助手plus', label: '医学助手plus'},
-                    ]}/>
+                      {value: 'qwen-plus', label: 'qwen-plus'},
+                      {value: 'deepseek-chat', label: 'deepseek-chat'},
+                    ]}
+                    onChange={(value) => setSelectedModel(value)}
+                  />
 
                 </Header>
 
                 <Content >
 
-                  <Chat currentMessagesValue={currentMessages} currentChatId={currentChatId} handleNewChatChange={handleNewChatChange}/>
+                  <Chat currentMessagesValue={currentMessages} currentChatId={currentChatId} selectedModel={selectedModel} handleNewChatChange={handleNewChatChange}/>
 
                 </Content>
                 <div style={{display:'flex',flex:1,}}>

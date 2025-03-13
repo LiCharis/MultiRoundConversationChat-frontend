@@ -39,6 +39,8 @@ const Control: React.FC<ChildComponentProps> = ({getCurrentMessages, getChatId, 
 
     // 组件加载时初始化会话 ID
     useEffect(() => {
+        //清除session对话记录
+        clearHistory();
         const newId = uuidv4();
         setCurrentChatId(newId);
         getChatId(newId);
@@ -351,11 +353,13 @@ const Control: React.FC<ChildComponentProps> = ({getCurrentMessages, getChatId, 
         const res = await response.json();
         if (res.code === 0) {
             proChat.clearMessage();
+            //清除session对话记录
+            await clearHistory();
             //消除之前存留的传递给Chat组件的历史消息，防止发不出新消息
             getCurrentMessages([]);
             getChatId(uuidv4());
             message.success("删除成功!")
-            getMessages();
+            await getMessages();
         } else {
             message.error(res.message);
         }
