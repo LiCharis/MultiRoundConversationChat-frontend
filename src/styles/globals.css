@@ -1,0 +1,18 @@
+/* 添加到你的全局样式文件中 */
+.page-transition {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.page-transition.loaded {
+  opacity: 1;
+}
+
+/* 隐藏未样式化的内容 */
+.hide-until-loaded {
+  visibility: hidden;
+}
+
+.hide-until-loaded.loaded {
+  visibility: visible;
+} 

@@ -126,7 +126,6 @@ const Control: React.FC<ChildComponentProps> = ({getCurrentMessages, getChatId, 
                 新聊天
                 <FormOutlined/>
             </a>, 'new', <Avatar src={<img src={'/logo.svg'} alt="avatar"/>}/>),
-            getItem(<Divider type="vertical"/>)
         ]
         const rootSubmenuKeysTemp: string[] = [];
         for (let i = 0; i < messageList?.length; i++) {
@@ -267,7 +266,7 @@ const Control: React.FC<ChildComponentProps> = ({getCurrentMessages, getChatId, 
                 return getItem(<a onClick={() => {
                     setMessages(item)
                 }}>{item?.title} </a>, item.id, <Text
-                    italic><MailOutlined/> {moment(item.messages[0]?.createAt).format('MM.DD')}</Text>, [
+                    italic>&nbsp;<MailOutlined/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{moment(item.messages[0]?.createAt).format('MM.DD')}</Text>, [
 
                     getItem(<Button
                         onClick={() => {
@@ -442,7 +441,7 @@ const Control: React.FC<ChildComponentProps> = ({getCurrentMessages, getChatId, 
         <div style={{height: '80%', overflow: 'auto'}}>
             {contextHolder}
             <Menu
-                theme="dark"
+                theme="light"
                 onClick={onClick}
                 style={{width: '100%', minWidth: 0, flex: "auto", backgroundColor: "transparent"}}
                 openKeys={openKeys}
