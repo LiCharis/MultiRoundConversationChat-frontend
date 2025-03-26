@@ -19,8 +19,10 @@ export default function AuthPage() {
   // 检查登录状态的函数
   const checkLoginStatus = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/checkLogin`, {
+      const response = await fetch("http://localhost:8130/api/auth/checkLogin", {
         credentials: 'include', // 重要：允许跨域请求携带凭证
+        method: 'POST',
+        body: JSON.stringify({})
       });
       const data = await response.json();
       if (data.data) {
@@ -40,7 +42,7 @@ export default function AuthPage() {
 
   const sendCaptcha = async (telephone: string) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/sendCaptcha?telephone=${telephone}`, {
+      const response = await fetch("http://localhost:8130/api/auth/sendCaptcha?telephone=${telephone}", {
         credentials: 'include',
       });
       const data = await response.json();
@@ -59,7 +61,7 @@ export default function AuthPage() {
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/${activeTab}`, {
+      const response = await fetch(`http://localhost:8130/api/auth/${activeTab}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -93,7 +95,7 @@ export default function AuthPage() {
   // 登出函数
   const logout = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+      const response = await fetch("http://localhost:8130/api/auth/logout", {
         method: 'POST',
         credentials: 'include',
       });

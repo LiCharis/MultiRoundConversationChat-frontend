@@ -52,13 +52,16 @@ const Chat: React.FC<ChildComponentProps> = ({
      */
     const addMessages = async (message: any) => {
 
-        const response = await fetch('/api/chat/add', {
+        const response = await fetch('http://localhost:8130/api/chat/add', {
             method: 'POST',
             body: JSON.stringify({
                 id: currentChatId,
                 userId: 1,
                 messages: message
             }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
             credentials: 'include', // 添加此行
         });
         const res = await response.json();

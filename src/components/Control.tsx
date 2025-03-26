@@ -150,7 +150,7 @@ const Control: React.FC<ChildComponentProps> = ({getCurrentMessages, getChatId, 
 
     const [api, contextHolder] = notification.useNotification();
     const openNotification = (placement: NotificationPlacement, id: any) => {
-        const url = `http://127.0.0.1:3000/share/${id}`;
+        const url = `http://localhost:3000/share/${id}`;
         api.info({
             message: '分享链接',
             description:
@@ -253,8 +253,11 @@ const Control: React.FC<ChildComponentProps> = ({getCurrentMessages, getChatId, 
      * 得到历史消息
      */
     const getMessages = async () => {
-        const response = await fetch('/api/chat/getHistoryList', {
+        const response = await fetch('http://localhost:8130/api/chat/getHistoryList', {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify({
                 userId: 1,
             }),
@@ -299,11 +302,14 @@ const Control: React.FC<ChildComponentProps> = ({getCurrentMessages, getChatId, 
      * 获取当前选中的历史数据
      */
     const getOne = async (id: any) => {
-        const response = await fetch('/api/chat/getOne', {
+        const response = await fetch('http://localhost:8130/api/chat/getOne', {
             method: 'POST',
             body: JSON.stringify({
                 id: id,
             }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
             credentials: 'include', // 添加此行
         });
         const res = await response.json();
@@ -313,7 +319,7 @@ const Control: React.FC<ChildComponentProps> = ({getCurrentMessages, getChatId, 
 
 
     const clearHistory = async () => {
-       await fetch('/api/chat/clearHistory',{
+       await fetch('http://localhost:8130/api/chat/clearHistory',{
            method: 'POST',
            body: JSON.stringify({})
        });
@@ -342,7 +348,7 @@ const Control: React.FC<ChildComponentProps> = ({getCurrentMessages, getChatId, 
      * 删除数据
      */
     const deleteMessages = async (id: any) => {
-        const response = await fetch('/api/chat/delete', {
+        const response = await fetch('http://localhost:8130/api/chat/delete', {
             method: 'POST',
             body: JSON.stringify({
                 id: id,
@@ -368,7 +374,7 @@ const Control: React.FC<ChildComponentProps> = ({getCurrentMessages, getChatId, 
      * 修改数据
      */
     const updateMessages = async (values: any) => {
-        const response = await fetch('/api/chat/update', {
+        const response = await fetch('http://localhost:8130/api/chat/update', {
             method: 'POST',
             body: JSON.stringify({
                 id: values.id,

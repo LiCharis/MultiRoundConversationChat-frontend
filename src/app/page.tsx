@@ -7,8 +7,10 @@ export default function Home() {
 
   const checkLoginStatus = useCallback(async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/checkLogin`, {
+      const response = await fetch("http://localhost:8130/api/auth/checkLogin", {
         credentials: 'include',
+        method: 'POST',
+        body: JSON.stringify({})
       });
       const data = await response.json();
 

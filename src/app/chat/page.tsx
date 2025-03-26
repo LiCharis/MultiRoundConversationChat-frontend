@@ -23,6 +23,7 @@ import {
   MenuUnfoldOutlined,
   UserOutlined,
   LogoutOutlined,
+  FireOutlined,
 } from "@ant-design/icons";
 import { useRouter } from 'next/navigation';
 
@@ -35,7 +36,7 @@ export default function ChatPage() {
 
   const fetchUserProfile = useCallback(async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/getProfile`, {
+      const response = await fetch("http://localhost:8130/api/auth/getProfile", {
         credentials: 'include',
       });
       const data = await response.json();
@@ -109,7 +110,7 @@ export default function ChatPage() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+      const response = await fetch("http://localhost:8130/api/auth/logout", {
         method: 'POST',
         credentials: 'include',
       });
@@ -249,13 +250,44 @@ export default function ChatPage() {
                         {user.nickName}
                       </div>
                       <div style={{ 
-                        fontSize: '12px', 
+                        fontSize: '12px',
                         color: 'rgba(0, 0, 0, 0.45)',
                       }}>
-                        查看个人信息
+                        {user.telephone}
                       </div>
                     </div>
                   )}
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '12px' }}>
+                  <Tooltip title="退出登录">
+                    <Button 
+                      type="text" 
+                      danger
+                      icon={<LogoutOutlined />} 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleLogout();
+                      }}
+                      style={{ width: collapsed ? '100%' : 'auto' }}
+                    >
+                      {!collapsed && '退出登录'}
+                    </Button>
+                  </Tooltip>
+                  
+                  <Tooltip title="对话热图分析">
+                    <Button 
+                      type="text" 
+                      icon={<FireOutlined style={{ color: '#7C4DFF' }} />} 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open('/chat/heatmap', '_blank');
+                      }}
+                      style={{ width: collapsed ? '100%' : 'auto' }}
+                    >
+                      {!collapsed && '热力分析'}
+                    </Button>
+                  </Tooltip>
                 </div>
               </Card>
             </Sider>
@@ -292,17 +324,6 @@ export default function ChatPage() {
                       onClick={() => router.push('/profile')}
                       style={{
                         color: '#7C4DFF',
-                        transition: 'all 0.3s ease',
-                      }}
-                    />
-                  </Tooltip>
-                  <Tooltip title="退出登录">
-                    <Button
-                      type="text"
-                      icon={<LogoutOutlined />}
-                      onClick={handleLogout}
-                      style={{
-                        color: '#FF4D4F',
                         transition: 'all 0.3s ease',
                       }}
                     />

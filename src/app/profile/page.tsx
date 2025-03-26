@@ -25,8 +25,10 @@ export default function ProfilePage() {
   // 获取用户信息
   const fetchUserProfile = useCallback(async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/getProfile`, {
+      const response = await fetch("http://localhost:8130/api/auth/getProfile", {
         credentials: 'include',
+        method: 'POST',
+        body: JSON.stringify({})
       });
       const data = await response.json();
       

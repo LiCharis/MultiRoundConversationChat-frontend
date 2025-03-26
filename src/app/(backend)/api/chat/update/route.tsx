@@ -4,7 +4,7 @@ export async function POST(request: Request) {
     const message = await request.json();
     try {
         const response = await fetch(
-            'http://127.0.0.1:8130/api/chat/update',
+            'http://localhost:8130/api/chat/update',
             {
                 method: 'POST',
                 headers: {
